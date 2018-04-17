@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="myCtrl">
+    <div style="border-style: dashed; border-color: grey; padding: 10px">
+        <p> Below text is response status code from server call</p>
+        <h4 ng-bind="statustext"></h4>
+    </div>
+    <div style="border-style: dashed; border-color: grey; padding: 10px; margin: 10px">
+        <p> Below section is for post call to backend</p>
+        <h1>Login Page</h1>
+        <input type="text" ng-model="request.userName" placeholder="User Name"/>
+        <br/>
+        <br/>
+        <input type="password" ng-model="request.password" placeholder="Password"/>
+        <br/>
+        <br/>
+        <input type="submit" ng-click="submitForm()" value="Submit"/>
+    </div>
+</div>
+
+
+    <script>
+    var app = angular.module('myApp', []);
+    app.controller('myCtrl', function($scope, $http) {
+        $http.get("localhost:8080/Challengeapi/v1/generate_number/")
+            .then(function(response) {
+                $scope.statustext = response.status;
+            }, function myError(response) {
+                $scope.statustext = response.status;
+                console.log('Error On Get Call', response.status);
+            });
+
+        $scope.request = {};
+        $scope.submitForm = function() {
+            console.log('request passed', $scope.request);
+           //            $http.post("localhost:8080/localhost:8080/Challengeapi/v1/web/generate_number//", $scope.request)
+
+            $http.post("localhost:8080/localhost:8080/Challengeapi/v1/generate_number/", $scope.request)
+                .then(function(response) {
+                    $scope.myWelcome = response.data;
+                }, function myError(response) {
+                    console.log('Error Message', response);
+                });
+        }
+    });
+
+    </script>
+
+  </body>
+</html>
